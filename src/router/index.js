@@ -17,14 +17,14 @@ const router = createRouter({
     },
     {
       path: '/movies/:moviesId',
-      component : () => import ('../views/MoviesView.vue'),
+      component : () => import ('../views/MoviesDetailView.vue'),
       children: [
         {
-          path: '/cast', //!!!!!!
+          path: 'cast',
           component : () => import('../views/AboutView.vue')
         },
         {
-          path: '/reviews', //!!!!!!
+          path: 'reviews',
           component : () => import('../views/AboutView.vue')
         }
       ]
