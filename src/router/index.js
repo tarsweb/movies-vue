@@ -21,11 +21,11 @@ const router = createRouter({
       children: [
         {
           path: 'cast',
-          component : () => import('../views/AboutView.vue')
+          component : () => import('../components/MoviesCast.vue')
         },
         {
           path: 'reviews',
-          component : () => import('../views/AboutView.vue')
+          component : () => import('../components/MoviesReviews.vue')
         }
       ]
     },
