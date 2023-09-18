@@ -24,10 +24,12 @@
     movies: {
       type : Array,
       required : true
-     }
+     },
+    pathImage: {
+      type: String,
+      required : true
+    }
   })
-
-  const pathImage = "https://image.tmdb.org/t/p/"
 </script>
 
 <style scoped>

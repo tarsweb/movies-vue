@@ -12,23 +12,25 @@
 </template>
 
 <script setup>
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, computed, onMounted, inject } from 'vue'
   import { useRoute } from 'vue-router'
 
   const route = useRoute()
-
   const moviesId = computed(() => route.params.moviesId)
-  const apiKey=  "bb9be7856d820d280efdc8865f07d5b2"
+  
+  const moviesApi = inject('moviesApi');
 
   const dataMovieReviews = ref([])
   
   async function getMovieReview() {
-
-    const response = await fetch(
-      `https://api.themoviedb.org/3/movie/${moviesId.value}/reviews?api_key=${apiKey}`
-    );
-    const data = await response.json();
-    dataMovieReviews.value = data.results;
+    const response = await moviesApi.get(`/movie/${moviesId.value}/reviews`, {
+      params: {
+        //api_key: apiKey,
+        language: "en"
+      }
+    })
+    console.log(response);
+    dataMovieReviews.value = response.data.results;
   }
 
   onMounted(() => 

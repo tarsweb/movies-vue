@@ -16,24 +16,26 @@
 </template>
 
 <script setup>
-  import { ref, computed, onMounted } from 'vue'
+  import { ref, computed, onMounted, inject } from 'vue'
   import { useRoute } from 'vue-router'
 
   const route = useRoute()
-
   const moviesId = computed(() => route.params.moviesId)
 
-  const apiKey=  "bb9be7856d820d280efdc8865f07d5b2"
-  const pathImage = "https://image.tmdb.org/t/p/";
+  const moviesApi = inject('moviesApi');
+  const pathImage = inject('moviesApipathImage');
 
   const dataMovieCast = ref([])
-  
+
   async function getMovieCast() {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/movie/${moviesId.value}/credits?api_key=${apiKey}`
-    );
-    const data = await response.json();
-    dataMovieCast.value = data.cast;
+    const response = await moviesApi.get(`/movie/${moviesId.value}/credits`, {
+      params: {
+        //api_key: apiKey,
+        language: "en"
+      }
+    })
+    console.log(response);
+    dataMovieCast.value = response.data.cast
   }
 
   onMounted(() => 

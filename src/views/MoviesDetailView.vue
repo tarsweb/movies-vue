@@ -45,11 +45,11 @@
 </template>
 
 <script setup>
-  import { computed, onMounted, ref } from 'vue'
+  import { ref, computed, onMounted, inject } from 'vue'
   import { useRoute } from 'vue-router'
-
-  const apiKey=  "bb9be7856d820d280efdc8865f07d5b2"
-  const pathImage = "https://image.tmdb.org/t/p/";
+  
+  const moviesApi = inject('moviesApi');
+  const pathImage = inject('moviesApipathImage');
 
   const route = useRoute()
 
@@ -79,12 +79,13 @@
   ]
 
   async function getMovie() {
-    const response = await fetch(
-      `https://api.themoviedb.org/3/movie/${moviesId.value}?api_key=${apiKey}`
-    );
-    const data = await response.json();
-    console.log("data",data);
-    dataMovie.value = data;
+    const response = await moviesApi.get(`/movie/${moviesId.value}`, {
+    params: {
+      //api_key: apiKey,
+      language: "en"
+    }
+    })
+    dataMovie.value = response.data
   }
 
   onMounted(() => 
