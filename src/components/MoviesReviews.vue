@@ -29,7 +29,6 @@
         language: "en"
       }
     })
-    console.log(response);
     dataMovieReviews.value = response.data.results;
   }
 

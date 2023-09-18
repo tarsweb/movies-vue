@@ -1,7 +1,5 @@
 <template>
   <div class="movies">
-    <!-- <h1>This is an movie page</h1>
-    <h2>Movie {{ moviesId }}</h2> -->
     <button>Go Back</button>
     <div class="movie" >
       <img v-if="dataMovie.poster_path" 
@@ -41,6 +39,7 @@
     </nav>
 
     <RouterView />
+
   </div>
 </template>
 

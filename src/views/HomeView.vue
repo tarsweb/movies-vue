@@ -36,5 +36,8 @@ onMounted(() =>
     <div v-if="movies.length > 0 ">
       <MoviesCardSet :movies='movies' :pathImage='moviesApipathImage' /> 
     </div>
+    <div v-else>
+      Loading...
+    </div>
   </main>
 </template>

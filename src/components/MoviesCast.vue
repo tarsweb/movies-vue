@@ -1,5 +1,5 @@
 <template>
-  <ul v-if="dataMovieCast.length > 0"> 
+  <ul v-if="dataMovieCast.length > 0">
     <li v-for="{id, profile_path, name, character} in dataMovieCast" :key="id">
         <img v-if="profile_path" 
           :src="pathImage + 'w500' + profile_path"
@@ -34,7 +34,6 @@
         language: "en"
       }
     })
-    console.log(response);
     dataMovieCast.value = response.data.cast
   }
 
