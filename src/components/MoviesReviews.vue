@@ -1,14 +1,20 @@
 <template>
-  <ul v-if="dataMovieReviews.length > 0"> 
-    <li v-for="{id, author, author_details:{username}, content, created_at} in dataMovieReviews" :key="id">
-      <div>
-        <h3>{{ author }}</h3>
-        <p>{{ username }}</p>
-        <p>{{ created_at }}</p>
-      </div>
-      <p> {{ content }}</p>
-    </li>
-  </ul>
+  <div v-if="dataMovieReviews !== null">
+    <ul v-if="dataMovieReviews.length > 0"> 
+      <li v-for="{id, author, author_details:{username}, content, created_at} in dataMovieReviews" :key="id">
+        <div>
+          <h3>{{ author }}</h3>
+          <p>{{ username }}</p>
+          <p>{{ created_at }}</p>
+        </div>
+        <p> {{ content }}</p>
+      </li>
+    </ul>
+    <p v-else> No reviews </p>
+  </div>
+  <div v-else>
+    Loading...
+  </div>
 </template>
 
 <script setup>
@@ -18,12 +24,15 @@
   const route = useRoute()
   const moviesId = computed(() => route.params.moviesId)
   
-  const moviesApi = inject('moviesApi');
+  const moviesApi = inject('moviesApi')
 
-  const dataMovieReviews = ref([])
+  const dataMovieReviews = ref(null)
+
+  const controller = new AbortController()
   
   async function getMovieReview() {
     const response = await moviesApi.get(`/movie/${moviesId.value}/reviews`, {
+      signal : controller.signal,
       params: {
         //api_key: apiKey,
         language: "en"

@@ -1,45 +1,50 @@
 <template>
   <div class="movies">
-    <button>Go Back</button>
-    <div class="movie" >
-      <img v-if="dataMovie.poster_path" 
-          :src="pathImage + 'w500' + dataMovie.poster_path"
-          :alt="dataMovie.title"
-          loading="lazy"
-          width='300' 
-          height="450">
-      <div>
-        <h1>{{ dataMovie.title }}</h1>
-        <h2> Original title : {{ dataMovie.original_title }}</h2>
-        <div> 
-          <h2>Vote / Votes :</h2>
-          <!-- <p>{{dataMovie.vote_average.toFixed(1)}} / {{dataMovie.vote_count.toFixed(0)}}</p> -->
-          <p>{{ dataMovie.vote_average }} / {{ dataMovie.vote_count }}</p>
+    <div v-if="dataMovie !== null">
+      <button>Go Back</button>
+      <div class="movie" >
+        <img v-if="dataMovie.poster_path" 
+            :src="pathImage + 'w500' + dataMovie.poster_path"
+            :alt="dataMovie.title"
+            loading="lazy"
+            width='300' 
+            height="450">
+        <div>
+          <h1>{{ dataMovie.title }}</h1>
+          <h2> Original title : {{ dataMovie.original_title }}</h2>
+          <div> 
+            <h2>Vote / Votes :</h2>
+            <!-- <p>{{dataMovie.vote_average.toFixed(1)}} / {{dataMovie.vote_count.toFixed(0)}}</p> -->
+            <p>{{ dataMovie.vote_average }} / {{ dataMovie.vote_count }}</p>
+          </div>
+          <div> 
+            <h2>Popularity :</h2>
+            <!-- <p>{popularity.toFixed(0)}</p> -->
+            <p>{{ dataMovie.popularity }}</p>
+          </div>
+          <div> 
+            <h2>Genres :</h2>
+            <!-- <p>{genres.map(({ name }) => name).join(', ')}</p> -->
+            <p>{{ dataMovie.genres }}</p>
+          </div>
+          <h2>Synopsis :</h2>
+          <p>{{ dataMovie.overview }}</p>
         </div>
-        <div> 
-          <h2>Popularity :</h2>
-          <!-- <p>{popularity.toFixed(0)}</p> -->
-          <p>{{ dataMovie.popularity }}</p>
-        </div>
-        <div> 
-          <h2>Genres :</h2>
-          <!-- <p>{genres.map(({ name }) => name).join(', ')}</p> -->
-          <p>{{ dataMovie.genres }}</p>
-        </div>
-        <h2>Synopsis :</h2>
-        <p>{{ dataMovie.overview }}</p>
       </div>
+      <nav>
+        <RouterLink v-for="item in navItems" :to="{
+          path: `/movies/${moviesId}/${item.href}`
+        }">
+          {{ item.text }}
+        </RouterLink>
+      </nav>
+  
+      <RouterView />
+  
     </div>
-    <nav>
-      <RouterLink v-for="item in navItems" :to="{
-        path: `/movies/${moviesId}/${item.href}`
-      }">
-        {{ item.text }}
-      </RouterLink>
-    </nav>
-
-    <RouterView />
-
+    <div v-else>
+      Loading ...
+    </div>
   </div>
 </template>
 
@@ -56,7 +61,7 @@
   // const backLinkHref = route.from ?? '/'
   // console.log(backLinkHref)
 
-  const dataMovie = ref({})
+  const dataMovie = ref(null)
 
   // const {
   //   poster_path,
