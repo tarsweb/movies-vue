@@ -12,11 +12,11 @@
           height="450">
       <div>
         <h1>{{ dataMovie.title }}</h1>
-        <h2> Original title : {{dataMovie.original_title}}</h2>
+        <h2> Original title : {{ dataMovie.original_title }}</h2>
         <div> 
           <h2>Vote / Votes :</h2>
           <!-- <p>{{dataMovie.vote_average.toFixed(1)}} / {{dataMovie.vote_count.toFixed(0)}}</p> -->
-          <p>{{dataMovie.vote_average}} / {{dataMovie.vote_count}}</p>
+          <p>{{ dataMovie.vote_average }} / {{ dataMovie.vote_count }}</p>
         </div>
         <div> 
           <h2>Popularity :</h2>
@@ -45,7 +45,7 @@
 </template>
 
 <script setup>
-  import { ref, computed, onMounted, inject } from 'vue'
+  import { ref, computed, toRefs, onMounted, inject } from 'vue'
   import { useRoute } from 'vue-router'
   
   const moviesApi = inject('moviesApi');
@@ -69,7 +69,7 @@
   //   original_title,
   //   genres,
   //   overview,
-  // } = dataMovie;
+  // } = computed(() => toRefs(dataMovie));
 
   // console.log("title",title);
 
