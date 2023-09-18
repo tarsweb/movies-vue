@@ -7,6 +7,6 @@ export default {
         params: options.params
       })
     app.config.globalProperties.$axios = {...instance}
-    // app.provide(options.Name, instance)
+    // app.provide(options.name, instance)
   }
 }
