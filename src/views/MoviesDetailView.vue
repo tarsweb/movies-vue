@@ -1,17 +1,17 @@
 <template>
   <div class="movies">
-    <div v-if="dataMovie !== null">
+    <div v-if="Object.keys(dataMovie) !== 0">
       <button>Go Back</button>
       <div class="movie" >
-        <img v-if="dataMovie.poster_path" 
-            :src="pathImage + 'w500' + dataMovie.poster_path"
+        <img v-if="refComputed('poster_path')"
+            :src="pathImage + 'w500' + refComputed('poster_path')"
             :alt="dataMovie.title"
             loading="lazy"
             width='300' 
             height="450">
         <div>
-          <h1>{{ title }}</h1>
-          <h2> Original title : {{ dataMovie.original_title }}</h2>
+          <h1>{{ refComputed("title") }}</h1>
+          <h2> Original title : {{ refComputed("original_title") }}</h2>
           <div class="description"> 
             <h2>Vote / Votes :</h2>
             <!-- <p>{{dataMovie.vote_average.toFixed(1)}} / {{dataMovie.vote_count.toFixed(0)}}</p> -->
@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-  import { ref, computed, toRefs, onMounted, inject, watchEffect } from 'vue'
+  import { ref, computed, toRefs, onMounted, inject, watchEffect, watch, reactive, isRef } from 'vue'
   import { useRoute } from 'vue-router'
   
   const moviesApi = inject('moviesApi');
@@ -62,7 +62,7 @@
   // const backLinkHref = route.from ?? '/'
   // console.log(backLinkHref)
 
-  const dataMovie = ref(null)
+  const dataMovie = ref({})
 
   // const {
   //   poster_path,
@@ -74,12 +74,21 @@
   //   original_title,
   //   genres,
   //   overview,
-  // } = computed(() => toRefs(dataMovie.value));
+  // } = computed(() => {return toRefs(dataMovie)});
 
-  // const obj = computed(() => toRefs(dataMovie.value));
+  const refComputed = computed(() => function (param) {const variable = dataMovie.value[param]; return variable})
   
+  const refComputed_= computed(() => {
+      const param = ['title', 'poster_path']
+      const res = param.reduce((acc, el) => acc = {... acc, [el] : ref(dataMovie.value[el])},{})
+      console.log(res);
+      return res
+    })
+
+  const {title, poster_path } = toRefs(refComputed_)
+
   // watchEffect(() => {
-    
+  //   console.log(refComputed_(['title', 'poster_path']));
   // })
   // const { title, genres_str } = computed(() => { 
   //   const title = dataMovie.value.title.toUpperCase();
@@ -87,7 +96,6 @@
   //   return { title,  genres_str }
   // })
 
-  //console.log("title",title);
 
   const navItems = [
     { href: 'cast', text: 'Cast' },
@@ -102,11 +110,14 @@
     }
     })
     dataMovie.value = response.data
+    // console.log(isRef(title));
   }
 
-  onMounted(() => 
+  onMounted(() => {
     getMovie()
-  )
+    // console.log(refComputed('title'));
+    // console.log(refComputed_(['title', 'poster_path']));
+  })
 
 // function onBack() {
 //   $route.go(backLinkHref)
