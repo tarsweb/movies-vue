@@ -1,6 +1,6 @@
 <template>
   <div v-if="dataMovieCast !== null">
-    <ul v-if="dataMovieCast.length > 0">
+    <ul v-if="dataMovieCast.length > 0 ">
       <li v-for="{id, profile_path, name, character} in dataMovieCast" :key="id">
           <img v-if="profile_path" 
             :src="pathImage + 'w500' + profile_path"
@@ -17,17 +17,17 @@
       </li>
     </ul>
     <p v-else> No cast</p>
-  </div> 
+  </div>
   <div v-else>
     Loading...
   </div>
 </template>
 
 <script setup>
-  import { ref, computed, onMounted, inject } from 'vue'
+  import { ref, computed, onMounted, onBeforeUnmount, watchEffect, watch,  inject } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import IconsEmptyPhoto from '@/icons/IconsEmptyPhoto.vue';
+  import IconsEmptyPhoto from './icons/IconsEmptyPhoto.vue';
 
   const route = useRoute()
   const moviesId = computed(() => route.params.moviesId)
@@ -37,9 +37,11 @@
 
   const dataMovieCast = ref(null)
 
-  const controller = new AbortController()
+  let controller
 
   async function getMovieCast() {
+    controller = new AbortController();
+    try {
     const response = await moviesApi.get(`/movie/${moviesId.value}/credits`, {
       signal : controller.signal,
       params: {
@@ -47,13 +49,18 @@
         language: "en"
       }
     })
-    dataMovieCast.value = response.data.cast
+    dataMovieCast.value = response.data.cast}
+    catch (error) {
+      console.log(error);
+      dataMovieCast.value = null
+    }
   }
 
-  onMounted(() => 
+  onMounted(() => {
     getMovieCast()
-  )
-</script>
+  })
+
+  </script>
 
 <style scoped>
 ul{

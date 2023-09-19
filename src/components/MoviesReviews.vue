@@ -28,9 +28,10 @@
 
   const dataMovieReviews = ref(null)
 
-  const controller = new AbortController()
+  let controller
   
   async function getMovieReview() {
+    controller = new AbortController()
     const response = await moviesApi.get(`/movie/${moviesId.value}/reviews`, {
       signal : controller.signal,
       params: {

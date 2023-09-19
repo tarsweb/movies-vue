@@ -34,6 +34,10 @@ header{
     align-items: center;
     flex-direction: row;
     gap: 10px;
+    position: sticky;
+    z-index: 1100;
+    top: 8px;
+    left: 0;
 }
 .wrapper{
   width: 100%;
