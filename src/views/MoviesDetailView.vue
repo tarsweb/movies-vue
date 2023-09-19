@@ -10,22 +10,23 @@
             width='300' 
             height="450">
         <div>
-          <h1>{{ dataMovie.title }}</h1>
+          <h1>{{ title }}</h1>
           <h2> Original title : {{ dataMovie.original_title }}</h2>
-          <div> 
+          <div class="description"> 
             <h2>Vote / Votes :</h2>
             <!-- <p>{{dataMovie.vote_average.toFixed(1)}} / {{dataMovie.vote_count.toFixed(0)}}</p> -->
             <p>{{ dataMovie.vote_average }} / {{ dataMovie.vote_count }}</p>
           </div>
-          <div> 
+          <div class="description"> 
             <h2>Popularity :</h2>
             <!-- <p>{popularity.toFixed(0)}</p> -->
             <p>{{ dataMovie.popularity }}</p>
           </div>
-          <div> 
+          <div class="description"> 
             <h2>Genres :</h2>
             <!-- <p>{genres.map(({ name }) => name).join(', ')}</p> -->
             <p>{{ dataMovie.genres }}</p>
+            <!-- <p>{{ genres_str }}</p> -->
           </div>
           <h2>Synopsis :</h2>
           <p>{{ dataMovie.overview }}</p>
@@ -49,7 +50,7 @@
 </template>
 
 <script setup>
-  import { ref, computed, toRefs, onMounted, inject } from 'vue'
+  import { ref, computed, toRefs, onMounted, inject, watchEffect } from 'vue'
   import { useRoute } from 'vue-router'
   
   const moviesApi = inject('moviesApi');
@@ -73,9 +74,20 @@
   //   original_title,
   //   genres,
   //   overview,
-  // } = computed(() => toRefs(dataMovie));
+  // } = computed(() => toRefs(dataMovie.value));
 
-  // console.log("title",title);
+  // const obj = computed(() => toRefs(dataMovie.value));
+  
+  // watchEffect(() => {
+    
+  // })
+  // const { title, genres_str } = computed(() => { 
+  //   const title = dataMovie.value.title.toUpperCase();
+  //   const genres_str = dataMovie.value.genres.reduce(acc, (el) => acc.push(el.name), []).join(",")
+  //   return { title,  genres_str }
+  // })
+
+  //console.log("title",title);
 
   const navItems = [
     { href: 'cast', text: 'Cast' },
@@ -102,10 +114,23 @@
 </script>
 
 <style scoped>
+  img{
+    display: block;
+    max-width: 100%;
+    height: auto;
+    object-fit: cover;
+    width: 100%;
+    pointer-events: none;
+  }
 
   .movie{
     display:grid;
     gap: 10px;
     grid-template-columns: 1fr 3fr;
+  }
+  .description{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
   }
 </style>
