@@ -20,6 +20,8 @@
 </template>
 
 <script setup>
+  import { useRoute } from 'vue-router';
+
   const props = defineProps({
     movies: {
       type : Array,
@@ -30,6 +32,9 @@
       required : true
     }
   })
+
+  const route = useRoute() 
+
 </script>
 
 <style scoped>

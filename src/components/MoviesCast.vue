@@ -7,10 +7,10 @@
             :alt="character"
             loading="lazy"
             height="50">
-            <template v-else>
+          <template v-else>
               <IconsEmptyPhoto />
-            </template> 
-          <div>
+          </template>
+          <div class="description">
             <h3>{{ name }}</h3>
             <p> {{ character }}</p>
           </div>  
@@ -27,7 +27,7 @@
   import { ref, computed, onMounted, onBeforeUnmount, watchEffect, watch,  inject } from 'vue'
   import { useRoute } from 'vue-router'
 
-  import IconsEmptyPhoto from './icons/IconsEmptyPhoto.vue';
+  import IconsEmptyPhoto from './icons/IconsEmptyPhoto.vue'
 
   const route = useRoute()
   const moviesId = computed(() => route.params.moviesId)
@@ -56,20 +56,38 @@
     }
   }
 
-  onMounted(() => {
-    getMovieCast()
+  // onMounted(() => {
+  //   getMovieCast()
+  // })
+  watchEffect( async (onInvalidate)  => {
+    onInvalidate(() => {
+      controller.abort()
+    })
+    getMovieCast('week')
   })
 
   </script>
 
 <style scoped>
-ul{
-  display: grid;
-  gap: 10px;
-  grid-template-columns: repeat(auto-fill,minmax(145px,1fr))
-}
-li{
-  display: flex;
-  gap: 10px;
-}
+  ul{
+    display: grid;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fill,minmax(145px,1fr))
+  }
+  li{
+    display: flex;
+    gap: 10px;
+    flex-direction: column;
+  }
+
+  img{
+    /* width: 100%; */
+    height: auto;
+    object-fit: cover;
+  }
+
+  .description{
+    display: flex;
+    flex-direction: column;
+  }
 </style>

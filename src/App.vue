@@ -26,9 +26,7 @@ const navItems = [
 </template>
 
 <style scoped>
-.router-link-active {
-  text-decoration-line: underline;
-}
+
 header{
     display: flex;
     align-items: center;

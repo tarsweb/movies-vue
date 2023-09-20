@@ -2,7 +2,7 @@
   <div v-if="dataMovieReviews !== null">
     <ul v-if="dataMovieReviews.length > 0"> 
       <li v-for="{id, author, author_details:{username}, content, created_at} in dataMovieReviews" :key="id">
-        <div>
+        <div class="review-info">
           <h3>{{ author }}</h3>
           <p>{{ username }}</p>
           <p>{{ created_at }}</p>
@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-  import { ref, computed, onMounted, inject } from 'vue'
+  import { ref, computed, onMounted, inject, watchEffect } from 'vue'
   import { useRoute } from 'vue-router'
 
   const route = useRoute()
@@ -42,7 +42,37 @@
     dataMovieReviews.value = response.data.results;
   }
 
-  onMounted(() => 
-    getMovieReview()
-  )
+  // onMounted(() => 
+  //   getMovieReview()
+  // )
+
+  watchEffect( async (onInvalidate)  => {
+    onInvalidate(() => {
+      controller.abort()
+    })
+    getMovieReview('week')
+  })
+
 </script>
+
+<style scoped>
+  ul{
+    display: flex;
+    gap:14px;
+    flex-direction: column;
+  }
+
+  li{
+    display: flex;
+    gap:10px;
+    flex-direction: column;
+
+    list-style: none;
+  }
+
+  .review-info{
+    display: flex;
+    gap:10px;
+    align-items: flex-end;
+  }
+</style>

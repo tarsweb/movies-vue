@@ -10,7 +10,9 @@ export default defineConfig({
     port: 4000,
   },
   plugins: [
-    vue(),
+    vue({
+      reactivityTransform: true
+    }),
     vueJsx(),
   ],
   resolve: {

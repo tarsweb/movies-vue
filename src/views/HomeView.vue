@@ -1,33 +1,43 @@
 <script setup>
-//import TheWelcome from '../components/TheWelcome.vue'
-import MoviesCardSet from '@/components/MoviesCardSet.vue';
+  //import TheWelcome from '../components/TheWelcome.vue'
+  import MoviesCardSet from '@/components/MoviesCardSet.vue';
 
-import { ref, onMounted, inject } from 'vue';
-import { useRoute } from 'vue-router';
+  import { ref, onMounted, inject, watchEffect } from 'vue';
+  import { useRoute } from 'vue-router';
 
-const moviesApi = inject('moviesApi');
-const moviesApipathImage = inject('moviesApipathImage');
+  const moviesApi = inject('moviesApi');
+  const moviesApipathImage = inject('moviesApipathImage');
 
-const movies = ref([])
+  const movies = ref([])
 
-const route = useRoute()
-const page = route.query.page ?? 1
+  const route = useRoute()
+  const page = ref(route.query.page ?? 1)
 
-async function getTrendingMovies(category) {
-  const response = await moviesApi.get(`/trending/movie/${category}`, {
-    params: {
-      //api_key: apiKey,
-      language: "en",
-      page: page,
-    }
-  })
-  movies.value = response.data.results;
-}
+  let controller
 
-onMounted(() => 
+  async function getTrendingMovies(category) {
+    controller = new AbortController();
+    const response = await moviesApi.get(`/trending/movie/${category}`, {
+      signal : controller.signal,
+      params: {
+        //api_key: apiKey,
+        language: "en",
+        page: page.value,
+      }
+    })
+    movies.value = response.data.results;
+  }
+
+  // onMounted(() => 
+  //     getTrendingMovies('week')
+  // )
+
+  watchEffect( async (onInvalidate)  => {
+    onInvalidate(() => {
+      controller.abort()
+    })
     getTrendingMovies('week')
-)
-
+  })
 </script>
 
 <template>
